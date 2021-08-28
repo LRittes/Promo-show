@@ -1,4 +1,4 @@
-import PromotionCard from "./components/Promotion/Card";
+import PromotionCard from 'components/Promotion/Card';
 
 const App = () => {
   const promotion = {
@@ -19,6 +19,7 @@ const App = () => {
     <div 
       style={{maxWidth: 800,
               margin: '30px auto',
+              fontFamily: 'Arial', 
       }}>
       <PromotionCard promotion={promotion}/>    
     </div>
