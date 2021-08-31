@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useHistory } from 'react-router-dom';
 import axios from 'axios';
 
@@ -11,10 +11,19 @@ const initialValue = {
     price: 0,
 }
 
-const PromotionForm = () => {
-    const [values, setValues] = useState(initialValue)
+const PromotionForm = ({ id }) => {
+    const [values, setValues] = useState(id ? null : initialValue)
     const history = useHistory()
     
+    useEffect(() => {
+        if(id){
+            axios.get(`http://localhost:5000/promotions/${id}`)
+                .then(response => {
+                    setValues(response.data)
+                })
+        }
+    }, [id])
+
     function onChange(ev){
         const { name, value } = ev.target
 
@@ -24,38 +33,47 @@ const PromotionForm = () => {
     function onSubmit(ev){
         ev.preventDefault()
 
-        axios.post('http://localhost:5000/promotions', values)
+        const method = id ? 'put' : 'post'
+        const url = id 
+        ? `http://localhost:5000/promotions/${id}` 
+        : 'http://localhost:5000/promotions'
+
+        axios[method](url, values)
             .then(response => {
                 history.push('/')
             })
     }
-
     return (
         <div>
             <h1>Promo Show</h1>
             <h2>Nova Promoção</h2>
 
-            <form onSubmit={onSubmit}>
-                <div className="promotion-form__group">
-                    <label htmlFor="title">Título</label>
-                    <input type="text" id='title' name='title' onChange={onChange} />
-                </div>
-                <div className="promotion-form__group">
-                    <label htmlFor="url">Link</label>
-                    <input type="text" id='url' name='url' onChange={onChange}/>
-                </div>
-                <div className="promotion-form__group">
-                    <label htmlFor="imageUrl">Image (URL)</label>
-                    <input type="text" id='imageUrl' name='imageUrl' onChange={onChange}/>
-                </div>
-                <div className="promotion-form__group">
-                    <label htmlFor="price">Preço</label>
-                    <input type="number" id='price' name='price' onChange={onChange}/>
-                </div>
-                <div>
-                    <button type='submit'>Salvar</button>
-                </div>
-            </form>
+            {!values ? (
+                <h2>Carregando...</h2>
+            ) : (
+                <form onSubmit={onSubmit}>
+                    <div className="promotion-form__group">
+                        <label htmlFor="title">Título</label>
+                        <input type="text" id='title' name='title' onChange={onChange} value={values.title}/>
+                    </div>
+                    <div className="promotion-form__group">
+                        <label htmlFor="url">Link</label>
+                        <input type="text" id='url' name='url' onChange={onChange} value={values.url}/>
+                    </div>
+                    <div className="promotion-form__group">
+                        <label htmlFor="imageUrl">Image (URL)</label>
+                        <input type="text" id='imageUrl' name='imageUrl' onChange={onChange} value={values.imageUrl}/>
+                    </div>
+                    <div className="promotion-form__group">
+                        <label htmlFor="price">Preço</label>
+                        <input type="number" id='price' name='price' onChange={onChange} value={values.price}/>
+                    </div>
+                    <div>
+                        <button type='submit'>Salvar</button>
+                    </div>
+                </form>
+            )
+        }
         </div>
     )
 }
