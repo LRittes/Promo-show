@@ -1,15 +1,16 @@
 import { useParams } from "react-router-dom";
 
+import PromotionForm from "components/Promotion/Form";
+
+import UIContainer from "components/UI/Container";
+
 const PagePromotionForm = () => {
     const { id } = useParams()
 
     return (
-        <div>
-            Form
-            {id && (
-                <h1>id: {id}</h1>
-            )}
-        </div>
+        <UIContainer>
+            <PromotionForm/>
+        </UIContainer>
     ) 
         
 }

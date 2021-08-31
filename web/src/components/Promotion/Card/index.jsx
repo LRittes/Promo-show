@@ -13,7 +13,7 @@ const PromotionCard = ({promotion}) => {
                     {promotion.title}
                 </h1>
                 <span className='promotion-card__price'>
-                    R$ {promotion.price.toFixed(2)}
+                    R$ {promotion.price}
                 </span>
                 <footer className='promotion-card__footer'>
                     {promotion.comments.length > 0 && (
