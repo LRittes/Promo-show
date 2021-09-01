@@ -9,7 +9,7 @@ const PagePromotionForm = () => {
 
     return (
         <UIContainer>
-            <PromotionForm/>
+            <PromotionForm id={id ? parseInt(id, 10) : null}/>
         </UIContainer>
     ) 
         
