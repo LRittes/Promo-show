@@ -1,9 +1,17 @@
 import PromotionCard from '../Card';
 import './styles.css'
 
-const PromotionList = ({ loading, promotions }) => {
-    if(loading){
+const PromotionList = ({ loading, error, promotions }) => {
+    if(error){
+        return <div>Algo deu errado</div>
+    }
+
+    if(loading || !promotions){
         return <div>Carregando...</div>
+    }
+    
+    if(promotions.length === 0){
+        return <div>Nenhum resultado encontrado</div>
     }
 
     return (
