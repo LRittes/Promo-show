@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react"
+import { useEffect, useRef, useState } from "react"
 import { Link } from "react-router-dom"
 
 import useApi from "components/Utils/useApi"
@@ -8,8 +8,10 @@ import './styles.css'
 import PromotionList from "../List"
 
 const PromotionSearch = () => {
+    const mountRef = useRef(null)
     const [search, setSearch] = useState('')
     const [load, loadInfo] = useApi({
+        debouncedDelay: 300,
         url: '/promotions',
         method: 'get',
         params: {
@@ -21,7 +23,14 @@ const PromotionSearch = () => {
     })
 
     useEffect(() => {
-        load()
+        load({
+            debounced: mountRef.current
+        })  
+        
+        if(!mountRef.current){
+            mountRef.current = true
+        }
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [search])
 
     return (
